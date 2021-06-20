@@ -2,6 +2,7 @@
 El front contiene una refactorizacion de la interfaz grafica. 
 Esta implementado con react.
 
+<img src="./docs/loginView.JPG">
 <img src="./docs/homeView.JPG">
 <img src="./docs/invoicePayedView.JPG">
 <img src="./docs/invoicesView.JPG">
