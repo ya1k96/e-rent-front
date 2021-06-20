@@ -4,7 +4,7 @@ import invoiceDetail from '../../images/icons/invoice.svg';
 export default class ItemInvoice extends Component {
     render() {
         return(<>
-        <div className="bg-white hover:bg-gray-200 shadow-xl  mb-2 mt-1 rounded-lg">
+        <div className="bg-white hover:bg-gray-200 shadow-xl  mb-2 mt-1 rounded-lg animate__animated animate__fadeIn">
             <div className="flex place-content-between px-4 py-3">  
                 <div className="flex items-start">
                     <img className="h-14 w-auto" src={invoiceDetail} alt="item-invoice"></img>                            
