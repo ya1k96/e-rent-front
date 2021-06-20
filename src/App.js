@@ -5,18 +5,22 @@ import './css/animate.min.css';
 import './css/flat-ui.css';
 
 import { Home } from './components/home';
+import { Provider } from 'react-redux';
 
 export class App extends Component {
   state = {
-    login: true,
+    login: false,
     user: null
-  }
-  
+  }    
+
   render() {
-    return (
-      this.state.login ?  
-      <Home></Home> :
-      <Login></Login>
+    return (       
+      <Provider>
+        {
+          this.state.login ? <Home></Home> : <Login></Login>
+        }
+
+      </Provider>
     );
   }
 }

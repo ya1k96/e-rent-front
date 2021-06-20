@@ -1,7 +1,67 @@
 import { Component } from "react";
 import logo from '../images/eRent144x144.png';
+import { useDispatch } from 'react-redux';
+import { login } from "../slice/loginSlise";
 
 export class Login extends Component {
+    state = {
+        email: {
+            invalid: false,
+            msg: '',
+            value: ''
+        },
+        password: {
+            invalid: false,
+            msg: '',
+            value: ''
+        },
+        className: ` h-10 
+        focus:rounded-full focus:ring
+        focus:outline-none block w-full pl-7 pr-12 md:text-sm sm:text-lg border-gray-300 rounded-full border-2 `
+    };    
+
+    getValueForm = (event) => {
+        this.setState({
+            [event.target.name]: {value: event.target.value}
+        });
+    }
+
+    resetFieldClass = (event) => {
+        this.setState({
+            [event.target.name]: {msg: '', invalid: false}
+        });
+    }
+
+    sendLogin = () => {
+        //prueba
+        const dispatch = useDispatch();
+
+        const body = {
+            email: this.state.email.value,
+            password: this.state.password.value
+        };
+        fetch('http://192.168.1.8:8080/api/login',
+        {
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify(body)            
+        })
+        .then(resp => resp.json())
+        .then(resp => {
+            if(resp.ok) {
+                //prueba
+                dispatch(login())
+            }
+            resp.errors?.forEach(error => {
+                this.setState({
+                    [error.param]: {invalid: true, msg: error.msg}
+                });
+            });            
+        });
+    }
+
     render() {
         return (<>
             <div className="flex justify-center">
@@ -10,40 +70,48 @@ export class Login extends Component {
                         <img src={logo} alt=""></img>          
                     </div>
                     <p className="text-gray-500 text-center text-xl">e-rent</p>
-                    <p className="text-gray-500 text-center mb-4 text-3xl">Ingresar</p>
+                    <p className="text-gray-500 text-center mb-4 md:text-3xl sm:text-4xl">Ingresar</p>
                     <form action="">
-                    <div className="mt-1 relative rounded-md shadow-sm">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">                    
-                        </div>
-                        <input type="text" name="price" 
-                        className="h-11 
-                        focus:rounded-full focus:ring
-                        focus:outline-none  block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-full border-2" placeholder="Correo"></input>
-                        <div className="absolute inset-y-0 right-0 flex items-center">
-                        </div>
+                    <div className="mt-1 rounded-full relative shadow-sm">
+                        <input type="text" name="email" 
+                        className={this.state.email.invalid
+                        ? `border-red-400 ${this.state.className}` : this.state.className} 
+                        placeholder="Correo" onChange={this.getValueForm}
+                        onClick={this.resetFieldClass}>                            
+                        </input>
+                        <p className="font-medium text-sm text-red-400">{this.state.email.msg}</p>
                     </div>            
-                        <div className="mt-1 relativexl shadow-sm">
-                            <input type="password" name="price" 
-                            className="h-11 
-                            focus:outline-none focus:ring
-                            focus:rounded-full  block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-full border-2" placeholder="Contraseña"></input>    
+                        <div className="mt-1 rounded-full relative shadow-sm">
+                            <input type="password" 
+                            name="password"
+                            className={ this.state.password.invalid
+                            ? `border-red-400  ${this.state.className}` : this.state.className} 
+                            placeholder="Contraseña" onChange={this.getValueForm}
+                            onClick={this.resetFieldClass}></input>   
+                            <p className="font-medium text-sm text-red-400">{this.state.password.msg}</p> 
                         </div>    
                     </form>
-                    <div className="flex justify-center mt-5">
-                    <div className="rounded-full shadow w-32 mr-5">
-                    <a  className="flex items-center justify-center px-8 py-1 border border-transparent text-base font-medium rounded-full text-white bg-blue-300 hover:bg-gray-100 hover:text-blue-400 md:py-2 md:text-lg md:px-10 cursor-pointer">
-                        Ingresar
-                    </a>
-                    </div>
-                    <div className="rounded-full shadow w-32">
-                    <a href="#" className="flex items-center justify-center px-8 py-1 border border-transparent text-base font-medium rounded-full text-blue-400 bg-gray-100 hover:bg-blue-100 hover:text-blue-400 md:py-2 md:text-lg 
-                    cursor-pointer md:px-10">
-                        Registrarte
-                    </a>
-                    </div>
+
+                    <div className="grid grid-cols-1 mx-auto gap-y-5 mt-5">
+                        <div className="rounded-full w-auto mx-auto">
+                            <a  className="px-8 py-1 text-base font-medium rounded-full text-white bg-blue-300  hover:text-blue-100 md:py-2 sm:py-3 sm:text-lg md:text-lg md:px-10 cursor-pointer focus:ring"
+                            onClick={this.sendLogin}>
+                                Ingresar
+                            </a>
+                        </div>
+                        <div className="rounded-full w-auto mx-auto mt-2">
+                            <a href="#" className="py-1 text-base font-medium rounded-full text-blue-400 bg-gray-custom md:py-2 sm:py-3 sm:text-lg md:text-md 
+                            cursor-pointer md:px-10 hover:text-blue-300">
+                                Registrarte
+                            </a>
+                        </div>
+                        <div className="mt-5">
+                            <p className="font-medium text-gray-500 text-sm">
+                                ¿Olvidaste tu contraseña?                                
+                            </p>
+                        </div>
 
                     </div>
-
                 </div>
             </div>
         </>
