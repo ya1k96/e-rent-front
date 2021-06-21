@@ -49,7 +49,7 @@ export class Navbar extends Component {
                     </a>
                 </div>                  
                 <div className="flex items-center">                    
-                        <p className="font-medium text-gray-500 cursor-pointer">Lucas</p>
+                        <p className="font-medium text-gray-500 cursor-pointer">{this.props.name}</p>
                 </div>
                 </div>
             </div>

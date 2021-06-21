@@ -1,15 +1,24 @@
-import { Component } from 'react';
-import { Login } from './components/login';
-import './css/index.css';
-import './css/animate.min.css';
-import './css/flat-ui.css';
-
+import React from 'react';
 import { Home } from './components/home';
+import { LoginForm } from './components/utils/loginForm';
+import { UserProvider } from './components/context/userContext';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-export class App extends Component {
+export const App = () => {      
 
-  render() {
-    return (<Login></Login>);
-  }
+    return (<>
+    <UserProvider>      
+      <Router>
+          <Switch>
+              <Route exact path="/login" component={LoginForm}/>                    
+              <Route exact path="/" component={Home}/>                    
+                    
+          </Switch>
+      </Router>
+    </UserProvider>
+    </>);
+    // return (
+    //     user.logged ? <Home></Home> : <Redirect to="/login"></Redirect>
+    // );
 }
 
