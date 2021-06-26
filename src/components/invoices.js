@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
 import ItemInvoice from "./utils/itemInvoice";
-import spinner from "./utils/spinner";
+import {spinner} from "./utils/spinner";
 
 export default class Invoices extends Component {
     state = {

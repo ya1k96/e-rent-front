@@ -1,14 +1,14 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-dom";
+import { HashRouter as Router, Route, Redirect, Switch } from "react-router-dom";
 import { UserContext } from "./context/userContext";
-import { Info } from "./info";
+import { Dashboard } from './dashboard';
 import Invoice from "./invoice";
 import Invoices from "./invoices";
+import { NewRenter } from './newrenter';
 import { Navbar } from "./partials/navbar";
-import { Renters } from "./renter";
-
+import { Renters } from './renters';
 export const Home = () => {
-    const {user, setUser} = React.useContext(UserContext);
+    const {user} = React.useContext(UserContext);
 
     return (
         user.logged ?
@@ -16,9 +16,10 @@ export const Home = () => {
         <Router>
             <Navbar name={user.publicUser.name}></Navbar>
             <Switch>
-                <Route exact path="/" component={Renters}/>                    
-                <Route exact path="/info" component={Info}/>                    
+                <Route exact path="/" component={Dashboard}/>                    
                 <Route exact path="/invoices" component={Invoices}/>                    
+                <Route exact path="/newrenter" component={NewRenter}/>                    
+                <Route exact path="/renters" component={Renters}/>                    
                 <Route exact path="/invoice/:id" component={Invoice}/>                    
             </Switch>
         </Router>

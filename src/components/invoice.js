@@ -1,5 +1,5 @@
 import { Component } from "react";
-import spinner from "./utils/spinner";
+import {spinner} from "./utils/spinner";
 import Moment from 'react-moment';
 import moment from 'moment/min/moment-with-locales';
 import logoUser from '../images/icons/neutral-user.png';

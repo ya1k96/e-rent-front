@@ -3,55 +3,53 @@ import logo from '../../images/eRent144x144.png';
 import { useForm } from 'react-hook-form';
 import { UserContext } from "../context/userContext";
 import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+import {loader} from '../utils/spinner';
+import { getUser, loginUser } from "../services/connect";
 
 export const LoginForm = () => {
     let history = useHistory();
     const {user, setUser} = React.useContext(UserContext);
     const { register, handleSubmit, formState: { errors } } = useForm();
+    const [state, setState] = React.useState({loading: false, notif: ''});
+
     if(localStorage.getItem('token')) {
         let token = localStorage.getItem('token');
-        fetch(`http://192.168.1.8:8080/api/verifyToken?token=${JSON.parse(token)}`)
-        .then(resp => resp.json())        
+        getUser(token)       
         .then((resp) => {
             if(resp.ok) {
                 setUser({...user, logged: true, publicUser: resp.decoded});
                 history.push('/');
-
             }
-        })        
+        })
     }
+
     let className = `rounded-full relative shadow-sm h-10 
     focus:rounded-full focus:ring
     focus:outline-none block w-full pl-7 pr-12 md:text-sm sm:text-lg border-gray-300 rounded-full border-2`;
 
 
     const onSubmit = (data) => {
+        setState({...state, loading: true})
         const body = {
             email: data.email,
             password: data.password
         };
-        fetch('http://192.168.1.8:8080/api/login',
-        {
-            headers: {
-                "Content-Type": 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify(body)            
-        })
-        .then(resp => resp.json())
-        .then(resp => {
-            if(resp.ok) {  
-                localStorage.setItem('token', JSON.stringify(resp.token));    
-                setUser({...user, logged: true});
-                history.push('/');
 
-            } else {
-                alert(`${resp.error.msg}`)            
+        loginUser(body)
+        .then(resp => {
+            const data = resp.data;
+            if(data.ok) {
+                localStorage.setItem('token', JSON.stringify(data.token));    
+                setUser({...user, logged: true, publicUser: data.publicUser});
+                history.push('/');                
             }
+            setState({...state, loading: false, notif: data.ok ? '': data.error.msg});
         });
     };
 
     return (<>
+        {state.loading ? loader() : ''}
         <div className="flex justify-center">
             <div className="md:w-2/5 md:h-2/5 p-10 grid grid-cols-1 gap-1">
                 <div className="flex justify-center">
@@ -59,6 +57,10 @@ export const LoginForm = () => {
                 </div>                
                 <p className="text-gray-500 text-center text-xl">e-rent</p>
                 <p className="text-gray-500 text-center mb-4 md:text-3xl sm:text-4xl">Ingresar</p>
+                {state.notif.length > 0 ? <div className="bg-red-100 p-4 rounded-lg shadow-sm">
+                <p className="text-red-400 font-medium text-sm">
+                    {state.notif}
+                </p> </div>: ''}                
                 <form action="" onSubmit={handleSubmit(onSubmit)}>
                 <div className="mt-1 ">
                     <input type="text" id="email"
@@ -104,13 +106,15 @@ export const LoginForm = () => {
                             type="submit">Ingresar</button>
                         </div>
                         <div className="rounded-full w-auto mx-auto mt-2">
-                            <a href="#" className="py-1 text-base font-medium rounded-full text-blue-400 bg-gray-custom md:py-2 sm:py-3 sm:text-lg md:text-md 
-                            cursor-pointer md:px-10 hover:text-blue-300">
-                                Registrarte
-                            </a>
+                            <Link to="/register">
+                                <button href="" className="py-1 text-base font-medium rounded-full text-blue-400 bg-gray-custom md:py-2 sm:py-3 sm:text-lg md:text-md 
+                                cursor-pointer md:px-10 hover:text-blue-300">
+                                    Registrarte
+                                </button>
+                            </Link>
                         </div>
                         <div className="mt-5">
-                            <p className="font-medium text-gray-500 text-sm">
+                            <p className="font-medium text-gray-500 text-sm text-center">
                                 ¿Olvidaste tu contraseña?                                
                             </p>
                         </div>
