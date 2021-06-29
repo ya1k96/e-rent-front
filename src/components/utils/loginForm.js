@@ -8,26 +8,42 @@ import {loader} from '../utils/spinner';
 import { getUser, loginUser } from "../services/connect";
 
 export const LoginForm = () => {
+    let className = `rounded-full relative shadow-sm h-10 
+    focus:rounded-full focus:ring
+    focus:outline-none block w-full pl-7 pr-12 md:text-sm sm:text-lg border-gray-300 rounded-full border-2`;
     let history = useHistory();
     const {user, setUser} = React.useContext(UserContext);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [state, setState] = React.useState({loading: false, notif: ''});
 
-    if(localStorage.getItem('token')) {
-        let token = localStorage.getItem('token');
-        getUser(token)       
-        .then((resp) => {
-            if(resp.ok) {
-                setUser({...user, logged: true, publicUser: resp.decoded});
-                history.push('/');
+    const isUser = () => {
+        if(user.logged) {
+            if(user.publicUser.role === 'client') { 
+                return history.push('/home');
+            } else {
+                return history.push('/dashboard');
             }
-        })
+        };
+        
+        if(localStorage.getItem('token')) {
+            let token = localStorage.getItem('token');
+            getUser(token)       
+            .then((resp) => {
+                if(resp.data.ok) {
+                    setUser({...user, logged: true, publicUser: resp.data.decoded});
+                    if(resp.data.decoded.role === 'admin') {
+                        history.push('/dashboard');
+                    } else {
+                        history.push('/home');                        
+                    }
+                }
+            })
+        }
     }
 
-    let className = `rounded-full relative shadow-sm h-10 
-    focus:rounded-full focus:ring
-    focus:outline-none block w-full pl-7 pr-12 md:text-sm sm:text-lg border-gray-300 rounded-full border-2`;
-
+    React.useEffect(() => {
+        isUser();
+    }, [])
 
     const onSubmit = (data) => {
         setState({...state, loading: true})

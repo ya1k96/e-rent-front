@@ -5,10 +5,14 @@ import './css/index.css';
 import './css/animate.min.css';
 import './css/flat-ui.css';
 import reportWebVitals from './reportWebVitals';
+import { UserProvider } from './components/context/userContext';
 
 ReactDOM.render(
   <React.StrictMode>
+    <UserProvider>
       <App />
+
+    </UserProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,12 +1,7 @@
 import React from "react";
 import { useForm } from 'react-hook-form';
-import { createRenter } from "./services/connect";
-import { spinner } from "./utils/spinner";
-
-let className = `rounded-full relative shadow-sm h-10 
-    focus:rounded-full focus:ring
-    focus:outline-none block w-full pl-7 pr-12 md:text-sm sm:text-lg border-gray-300 rounded-full border-2`;
-
+import { createRenter } from "../services/connect";
+import { spinner } from "../utils/spinner";
 export const NewRenter = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [state, setState] = React.useState({loading: false, notif: ''});
@@ -19,7 +14,7 @@ export const NewRenter = () => {
             const data = resp.data;
             setState({...state, loading: false, notif: data.msg, success: data.ok})
             setTimeout(function() {
-                setState({...state, notif: ''})
+                setState({...state, notif: ''})                
             },3000)
             
         });

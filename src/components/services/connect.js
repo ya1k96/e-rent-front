@@ -16,3 +16,11 @@ export const createRenter = (renter) => {
 export const loginUser = (user) => {
     return axios.post(`${url}login`, user);
 }
+
+export const getBoard = () => {
+    return axios.get(`http://192.168.1.8:8080/api/dashboard`);
+}
+
+export const createPayment = (idInvoice) => {
+    return axios.post(`http://192.168.1.8:8080/api/payments/create/${idInvoice}`);
+}

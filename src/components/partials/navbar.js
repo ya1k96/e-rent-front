@@ -44,7 +44,7 @@ export class Navbar extends Component {
                 <div className="flex justify-around items-center border-b-2 border-gray-100 py-2">
                 <div className="flex items-center">
                     <img className="h-12 w-12" src={logoERent}></img>
-                    <a className="font-medium text-gray-600 text-xl" href="#">
+                    <a className="font-medium text-gray-600 text-xl" href="/">
                         e-Rent
                     </a>
                 </div>                  
