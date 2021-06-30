@@ -11,7 +11,7 @@ import Invoices from './components/adminComponents/invoices';
 import { NewRenter } from './components/adminComponents/newrenter';
 import Renters from './components/adminComponents/renters';
 import Invoice from './components/adminComponents/invoice';
-import { Navbar } from './components/partials/navbar';
+import Navbar from './components/partials/navbar';
 
 const queryClient = new QueryClient();
 

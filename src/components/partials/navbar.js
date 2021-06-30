@@ -1,60 +1,66 @@
-import { Component } from "react";
-import { Link } from "react-router-dom";
+import React, {useState} from "react";
+import { useHistory } from "react-router-dom";
 import logoERent from '../../images/eRent144x144.png';
+import { UserContext } from "../context/userContext";
+import Modal from "../utils/modal";
 
-export class Navbar extends Component {
-    openMenu() {
-        return (<div className="-mr-2 -my-2 md:hidden">
-        <button type="button" className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-expanded="false">
-        <span className="sr-only">Open menu</span>
-        <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" ariaHidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-        </button>
-    </div> );
+const Navbar = (props) => {
+    const { setUser } = React.useContext(UserContext);
+    const [active, setActive] = useState(false);
+    let history = useHistory();
+
+    const toggle = () => {
+        setActive(!active);
     }
-    
-    itemsNav() {
-        return (<nav className="w-1/4 md:block lg:block sm:hidden">
-        <div className="flex justify-around">                       
-            <Link to="/renters">
-                <a  className="text-base font-medium text-gray-500 hover:text-gray-900">
-                Renters
+
+    const handle = () => {
+        localStorage.removeItem('token');
+        setUser({publicUser:null, logged: false})
+        history.push('/');
+    }
+
+    return (<>
+        <div className="relative bg-gray-custom shadow-md p-0">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="flex justify-around items-center border-b-2 border-gray-100 py-2">
+            <div className="flex items-center">
+                <img className="h-12 w-12" src={logoERent}></img>
+                <a className="font-medium text-gray-600 text-xl" href="/">
+                    e-Rent
                 </a>
-            </Link>
-            <Link to="/info">
-                <a  className="text-base font-medium text-gray-500 hover:text-gray-900">
-                Info
-                </a>
-            </Link>
-            <Link to="/info">
-                <a  className="text-base font-medium text-gray-500 hover:text-gray-900">
-                Info
-                </a>
-            </Link>
+            </div>                  
+            <div className="flex items-center">                    
+                    <p className="font-medium text-gray-500 cursor-pointer mr-5">{props.name}</p>
+                    <button className="" onClick={toggle}>
+                        
+                        <p className="text-md font-medium text-gray-700"><span class="fui-exit"></span> salir</p>
+                    </button>
+            </div>
+            </div>
         </div>
-        
-    </nav>
-    )
-    }
-    render() {
-        return (<>
-            <div className="relative bg-gray-custom shadow-md p-0">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6">
-                <div className="flex justify-around items-center border-b-2 border-gray-100 py-2">
-                <div className="flex items-center">
-                    <img className="h-12 w-12" src={logoERent}></img>
-                    <a className="font-medium text-gray-600 text-xl" href="/">
-                        e-Rent
-                    </a>
-                </div>                  
-                <div className="flex items-center">                    
-                        <p className="font-medium text-gray-500 cursor-pointer">{this.props.name}</p>
-                </div>
+                
+    </div>
+    <Modal active={active} toggle={toggle} okMessage="Si" handle={handle}>
+        <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div className="sm:flex sm:items-start">
+            <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                <svg className="h-6 w-6 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">              
+                </svg>
+            </div>
+            <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                Cerrar sesion
+                </h3>
+                <div className="mt-2">
+                <p className="text-sm text-gray-500">
+                    ¿Estas seguro que queres salir?
+                </p>
                 </div>
             </div>
-                   
+            </div>
         </div>
-        </>);
-    }
+    </Modal>
+    </>);
 }
+
+export default Navbar;

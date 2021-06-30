@@ -6,6 +6,8 @@ import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import {loader} from '../utils/spinner';
 import { getUser, loginUser } from "../services/connect";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const LoginForm = () => {
     let className = `rounded-full relative shadow-sm h-10 
@@ -14,7 +16,7 @@ export const LoginForm = () => {
     let history = useHistory();
     const {user, setUser} = React.useContext(UserContext);
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const [state, setState] = React.useState({loading: false, notif: ''});
+    const [loading, setLoading] = React.useState(false);
 
     const isUser = () => {
         if(user.logged) {
@@ -46,7 +48,7 @@ export const LoginForm = () => {
     }, [])
 
     const onSubmit = (data) => {
-        setState({...state, loading: true})
+        setLoading(true);
         const body = {
             email: data.email,
             password: data.password
@@ -58,25 +60,41 @@ export const LoginForm = () => {
             if(data.ok) {
                 localStorage.setItem('token', JSON.stringify(data.token));    
                 setUser({...user, logged: true, publicUser: data.publicUser});
-                history.push('/');                
-            }
-            setState({...state, loading: false, notif: data.ok ? '': data.error.msg});
+                history.push('/');                                
+            } else {
+                toast(resp?.msg);   
+            }            
+        })
+        .catch(error => {
+            toast(error.toString())
+        })
+        .finally(() => {
+            setLoading(false);
         });
     };
 
     return (<>
-        {state.loading ? loader() : ''}
+        {loading ? loader() : ''}
+        <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        toastClassName="bg-red-400 text-lg font-medium"
+        hideProgressBar={true}
+        bodyClassName="text-white"
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        />
         <div className="flex justify-center">
             <div className="md:w-2/5 md:h-2/5 p-10 grid grid-cols-1 gap-1">
                 <div className="flex justify-center">
                     <img src={logo} alt=""></img>          
                 </div>                
                 <p className="text-gray-500 text-center text-xl">e-rent</p>
-                <p className="text-gray-500 text-center mb-4 md:text-3xl sm:text-4xl">Ingresar</p>
-                {state.notif.length > 0 ? <div className="bg-red-100 p-4 rounded-lg shadow-sm">
-                <p className="text-red-400 font-medium text-sm">
-                    {state.notif}
-                </p> </div>: ''}                
+                <p className="text-gray-500 text-center mb-4 md:text-3xl sm:text-4xl">Ingresar</p>                               
                 <form action="" onSubmit={handleSubmit(onSubmit)}>
                 <div className="mt-1 ">
                     <input type="text" id="email"
