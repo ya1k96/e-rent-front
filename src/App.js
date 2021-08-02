@@ -1,7 +1,7 @@
 import React from 'react';
 import { LoginForm } from './components/utils/loginForm';
 import { UserContext } from './components/context/userContext';
-import { HashRouter, Route, Switch} from "react-router-dom";
+import { HashRouter, Route, Switch } from "react-router-dom";
 import { RegisterForm } from './components/utils/registerForm';
 import { QueryClient, QueryClientProvider } from 'react-query'
 import ProtectedRoute from './components/utils/ProtectedRoute';
@@ -31,7 +31,6 @@ export const App = () => {
                         <ProtectedRoute exact path="/newrenter" component={NewRenter}role="admin" user={user}></ProtectedRoute>  
                         <ProtectedRoute exact path="/renters" component={Renters} role="admin" user={user}></ProtectedRoute>  
                         <ProtectedRoute exact path="/invoice/:id" component={Invoice} role="admin" user={user}></ProtectedRoute> 
-
                     </Switch>
                 </HashRouter> 
                 <ProtectedRoute exact path="/home" component={Home} role="client" user={user}></ProtectedRoute>                            

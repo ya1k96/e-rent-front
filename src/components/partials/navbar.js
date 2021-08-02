@@ -33,7 +33,7 @@ const Navbar = (props) => {
                     <p className="font-medium text-gray-500 cursor-pointer mr-5">{props.name}</p>
                     <button className="" onClick={toggle}>
                         
-                        <p className="text-md font-medium text-gray-700"><span class="fui-exit"></span> salir</p>
+                        <p className="text-md font-medium text-gray-700"><span className="fui-exit"></span> salir</p>
                     </button>
             </div>
             </div>

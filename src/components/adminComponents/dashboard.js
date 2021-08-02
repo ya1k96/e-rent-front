@@ -7,7 +7,7 @@ import { getBoard } from '../services/connect';
 import { useQuery } from 'react-query'
 import ListInvoices from '../utils/listInvoices';
 
-const Dashboard = React.useEffect(() => {    
+const Dashboard = () => {    
     const { isLoading, error, data } = useQuery('dashboard', getBoard);
 
     const renderInvoices = () => {    
@@ -43,6 +43,6 @@ const Dashboard = React.useEffect(() => {
         </div>
         {/* <Modal show={state.showModal}></Modal> */}
     </>);
-}, []);
+};
 
 export default Dashboard;
