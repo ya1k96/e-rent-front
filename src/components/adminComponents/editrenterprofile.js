@@ -17,10 +17,10 @@ export const EditRenterProfile = (props) => {
         getRenterById(id)
         .then(resp => {
             const data = resp;        
+            setrenter(data.contract);            
             setloading(false);        
-            setrenter(data.contract);
         });
-    }, [false]);
+    }, []);
     
     const updateRenter = (data) => {
         setState({...state, loading: true})
@@ -53,10 +53,10 @@ export const EditRenterProfile = (props) => {
             <div className="px-4 py-5 sm:p-6">
                 <div className="grid grid-cols-12 gap-2">
                 <div className="md:col-span-6 sm:col-span-12">
-                    <label for="first_name" className="block text-sm font-medium text-gray-700">Nombre</label>
-                    <input type="text" name="first_name" id="first_name" 
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">Nombre</label>
+                    <input type="text" name="name" id="name" 
                     defaultValue={renter?.name}
-                    autocomplete="given-name" className="focus:outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2"
+                    className="focus:outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2"
                     {
                     ...register('name', { 
                     required: { value: true, message: 'Ingresa un nombre'} })
@@ -70,10 +70,10 @@ export const EditRenterProfile = (props) => {
                 </div>
 
                 <div className="md:col-span-6 sm:col-span-12">
-                    <label for="last_name" className="block text-sm font-medium text-gray-700">Apellido</label>
-                    <input type="text" name="last_name" id="last_name" 
+                    <label htmlFor="surname" className="block text-sm font-medium text-gray-700">Apellido</label>
+                    <input type="text" name="surname" id="surname" 
                     defaultValue={renter?.surname}
-                    autocomplete="family-name" className="focus:outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2"
+                     className="focus:outline-none mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md py-2"
                     {
                     ...register('lastname', { 
                     required: { value:true, message: 'Ingresa un apellido'}})
@@ -98,25 +98,25 @@ export const EditRenterProfile = (props) => {
                     </div>
                 </div>                            
                 <div className="md:col-span-12 sm:col-span-12 ">
-                    <label for="email_address" className="block text-sm font-medium text-gray-500">Monto: {renter?.price} ARS</label>                                               
+                    <label className="block text-sm font-medium text-gray-500">Monto: {renter?.price} ARS</label>                                               
                 </div>                            
                 <div className="md:col-span-6 sm:col-span-12">
-                    <label for="country" className="block text-sm font-medium text-gray-500">Periodo aumento {renter?.increment_month} Meses</label>                                                                   
+                    <label className="block text-sm font-medium text-gray-500">Periodo aumento {renter?.increment_month} Meses</label>                                                                   
                 </div>
                 <div className="md:col-span-12 sm:col-span-12">
-                    <label for="country" className="block text-sm font-medium text-gray-500">Porcentaje de aumento {renter?.increment_porc}%</label>                        
+                    <label className="block text-sm font-medium text-gray-500">Porcentaje de aumento {renter?.increment_porc}%</label>                        
                 </div>
                 <div className="md:col-span-12 sm:col-span-6">
-                    <label for="street_address" className="block text-sm font-medium text-gray-500">Fecha de inicio { moment(renter?.begin).format('YYYY-MM-DD')}</label>                        
+                    <label className="block text-sm font-medium text-gray-500">Fecha de inicio { moment(renter?.begin).format('YYYY-MM-DD')}</label>                        
                     
                 </div>
                 <div className="md:col-span-12 sm:col-span-6">
-                    <label for="street_address" className="block text-sm font-medium text-gray-500">Fecha de fin <span className="text-sm font-medium text-gray-500">{ moment(renter?.end).format('YYYY-MM-DD')}</span></label>                        
+                    <label className="block text-sm font-medium text-gray-500">Fecha de fin <span className="text-sm font-medium text-gray-500">{ moment(renter?.end).format('YYYY-MM-DD')}</span></label>                        
                     
                 </div>
 
                 <div className="md:col-span-12 sm:col-span-6">
-                    <label for="country" className="block text-sm font-medium text-gray-500">Fin del contrato {moment(renter?.end).from(renter?.begin)}</label>                                                                     
+                    <label className="block text-sm font-medium text-gray-500">Fin del contrato {moment(renter?.end).from(renter?.begin)}</label>                                                                     
                 </div>                            
                 
                 </div>

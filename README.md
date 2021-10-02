@@ -7,3 +7,4 @@ Esta implementado con react.
 <img src="./docs/invoicePayedView.JPG">
 <img src="./docs/invoicesView.JPG">
 <img src="./docs/invoiceView.JPG">
+<img src="./docs/invoice_pdf.JPG">

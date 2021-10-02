@@ -5,6 +5,11 @@ import './css/index.css';
 import './css/animate.min.css';
 import './css/flat-ui.css';
 import { UserProvider } from './components/context/userContext';
+import Moment from 'react-moment';
+import moment from 'moment/min/moment-with-locales';
+
+Moment.globalMoment = moment;
+Moment.globalLocale = 'es';
 
 ReactDOM.render(
   <React.StrictMode>

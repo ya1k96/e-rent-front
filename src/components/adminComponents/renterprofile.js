@@ -18,7 +18,7 @@ export const RenterProfile = (props) => {
             setloading(false);        
             setrenter(data.contract);
         });
-    }, [false]);
+    }, []);
 
     return (<>
         <p className="font-medium text-2xl text-gray-500 text-center mt-4">Detalles del contrato</p>

@@ -32,7 +32,7 @@ const Invoice = (props) => {
     
     const sendPayment = () => {
         setloading(true);
-        createPayment(state._id)
+        createPayment(contract._id)
         .then(resp => {
             const data = resp.data;                        
             setPayed(true);

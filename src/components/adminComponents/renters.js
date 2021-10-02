@@ -33,8 +33,8 @@ const Renters = () => {
         <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-4">
             {                 
                 (renters.length > 0 && !loading) ?
-                renters.map(renter => <Link to={'/renter/'+renter._id}>
-                <div className="bg-white shadow-lg rounded-xl w-40 h-40 hover:bg-blue-200  cursor-pointer animate__animated animate__fadeIn" key={renter._id}>                        
+                renters.map(renter => <Link to={'/renter/'+renter._id} key={renter._id}>
+                <div className="bg-white shadow-lg rounded-xl w-40 h-40 hover:bg-blue-200  cursor-pointer animate__animated animate__fadeIn">                        
                 <img className="m-auto mt-3 w-28 h-28" src={neutralUser} alt="invoice-logo"></img>
                 <p className="text-center font-medium text-gray-600 ">{renter.name +' '+ renter.surname}</p>
             </div></Link> ) : ''          
