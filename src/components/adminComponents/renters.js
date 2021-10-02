@@ -4,16 +4,18 @@ import neutralUser from '../../images/icons/neutral-user.png';
 import { getRenters } from '../services/connect';
 import { spinner } from '../utils/spinner';
 const Renters = () => {
-    const [state, setState] = React.useState({loading: true, renters: []});
+    const [renters, setrenters] = React.useState([]);
+    const [loading, setloading] = React.useState(true);
     
-    React.useEffect(() => {
+    React.useEffect(()=> {
         getRenters().then(resp => {
             const data = resp.data;
             if(data.ok) {
-                setState({...state, loading: false, renters: data.renters});
+                setrenters(data.renters);
+                setloading(false);
             }
         });
-    })
+    }, [false]);
 
     return(<>
     <div className="flex justify-center mt-5">
@@ -27,14 +29,15 @@ const Renters = () => {
     </div>
     <div className="flex justify-center mt-6">
         {
-        state.loading ? spinner() : 
+        loading ? spinner() : 
         <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-4">
             {                 
-                (state.renters.length > 0 && !state.loading) ?
-                state.renters.map(renter => <div className="bg-white shadow-lg rounded-xl w-40 h-40 hover:bg-blue-200  cursor-pointer animate__animated animate__fadeIn" key={renter._id}>                        
+                (renters.length > 0 && !loading) ?
+                renters.map(renter => <Link to={'/renter/'+renter._id}>
+                <div className="bg-white shadow-lg rounded-xl w-40 h-40 hover:bg-blue-200  cursor-pointer animate__animated animate__fadeIn" key={renter._id}>                        
                 <img className="m-auto mt-3 w-28 h-28" src={neutralUser} alt="invoice-logo"></img>
                 <p className="text-center font-medium text-gray-600 ">{renter.name +' '+ renter.surname}</p>
-            </div> ) : ''          
+            </div></Link> ) : ''          
             }
         </div>
         }

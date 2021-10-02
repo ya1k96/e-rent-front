@@ -37,7 +37,9 @@ const Dashboard = () => {
                     { spinner() }
                 </div> :
                 <div className="md:w-1/3 sm:w-screen h-52 rounded-xl">
-                    <div className="grid grid-cols-1 ">{ renderInvoices() }</div>
+                    <div className="grid grid-cols-1 ">
+                        <renderInvoices/>
+                    </div>
                 </div>
             }                
         </div>

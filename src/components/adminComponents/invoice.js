@@ -1,56 +1,59 @@
 import React from "react";
 import Moment from 'react-moment';
 import logoUser from '../../images/icons/neutral-user.png';
-import { createPayment } from "../services/connect";
+import { createPayment, getInvoice } from "../services/connect";
 import { loader } from "../utils/spinner";
 import { withRouter } from 'react-router-dom';
 
 const Invoice = (props) => {
-    const initialState = { invoice: {
+    const {id} = props.computedMatch.params;
+    const initialState = {
         period: '',
         expiration: '',
         contract_id: {
             name: '', surname: ''
         }
-    } }
-    const [state, setState] = React.useState(initialState);
+     }
+    const [contract, setContract] = React.useState(initialState);
     const [notif, setnotif] = React.useState({ msg: '' , success: ''});
     const [payed, setPayed] = React.useState(false);
     const [loading, setloading] = React.useState(true);
-    const {id} = props.computedMatch.params;
     
     React.useEffect(() => {
-        fetch(`http://192.168.1.8:8080/api/invoices/detail/${id}`)
-        .then(resp => resp.json())
+        getInvoice(id)
         .then(resp => {
-            setPayed(resp.invoice.payed)
-            setState({...state, invoice: resp?.invoice});
+            console.log(resp.data.invoice);
+            setPayed(resp.data.invoice.payed)
+            setContract(resp.data.invoice);
             setloading(false);
         } );
     }, [payed])
 
     
     const sendPayment = () => {
-        setState({...state, loading: true});
-        createPayment(state.invoice._id)
+        setloading(true);
+        createPayment(state._id)
         .then(resp => {
             const data = resp.data;                        
             setPayed(true);
             setnotif({msg: data.msg, success: data.ok});
-            setTimeout(() => setnotif({ msg:'', success: ''}), 3000);
+            setTimeout(() => {
+                setnotif({ msg:'', success: ''});
+                setloading(false);
+            }, 3000);
         })        
     }
 
     const CheckPayed = () => {
-        return state.invoice.payed ?
+        return contract.payed ?
         <button className="bg-white rounded-full p-1 px-2 mt-2 focus:outline-none self-start">                                
             <p className="font-medium text-green-400"><span className="fui-check-circle text-green-400"></span> Pagado</p>
         </button>: '';        
     }
     
     const ReciboButton = () => {
-        return state.invoice.payed ? 
-        <a href={`http://192.168.1.8:8080/api/payments/detail/${state.invoice.payment._id}/${state.invoice._id}`}>
+        return contract.payed ? 
+        <a href={`http://192.168.1.8:8080/api/payments/detail/${contract.payment._id}/${contract._id}`}>
             <button className="bg-blue-400 rounded-full p-1 px-2 mt-2 focus:outline-none" >                                
                 <p className="font-medium text-white text-md"><span className="fui-link"></span> Descargar recibo</p>
             </button> 
@@ -92,17 +95,17 @@ const Invoice = (props) => {
                             <p className="text-gray-700 ">
                                 <span className="text-lg font-medium ">
                                     Mes de {' '}
-                                    <Moment format="MMMM">{state.invoice.period}</Moment>                                 
+                                    <Moment format="MMMM">{contract.period}</Moment>                                 
                                 </span>
                                 <br></br>                     
                                 Total a pagar 
                                 <span className="text-gray-500">
-                                {' ' + state.invoice.total + ' ARS'}
+                                {' ' + contract.total + ' ARS'}
                                 </span>  
                                 <br></br>                     
                                 Periodo {' '}
                                 <span className="text-gray-500">
-                                <Moment format="MMMM/Y">{state.invoice.period}</Moment> 
+                                <Moment format="MMMM/Y">{contract.period}</Moment> 
                                 </span>  
                             </p>  
                             <div className="mt-4">
@@ -115,7 +118,7 @@ const Invoice = (props) => {
                             {
                                 !payed ? <p className="text-sm text-gray-500 mt-1">
                                 <span>Vence </span> 
-                                <Moment fromNow>{state.invoice.expiration}</Moment>
+                                <Moment fromNow>{contract.expiration}</Moment>
                                 </p>: null
                             }
                         </div>
@@ -123,7 +126,7 @@ const Invoice = (props) => {
                             <img className="mb-2 w-24 h-24 self-center" src={logoUser} alt="invoice-logo"></img> 
                             <p className="text-gray-700 font-semibold text-center">
                                 <span className="text-gray-500 m-0">
-                                    {state.invoice.contract_id.name + ' ' + state.invoice.contract_id.surname}                        
+                                    {contract.contract_id.name + ' ' + contract.contract_id.surname}                        
                                 </span>
                             </p>
 
