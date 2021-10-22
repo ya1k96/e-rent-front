@@ -1,7 +1,7 @@
 import React from "react";
 import Moment from 'react-moment';
 import logoUser from '../../images/icons/neutral-user.png';
-import { createPayment, getInvoice } from "../services/connect";
+import { createPayment, getInvoice } from "../../services/connect";
 import { loader } from "../utils/spinner";
 import { withRouter } from 'react-router-dom';
 
@@ -21,10 +21,9 @@ const Invoice = (props) => {
     
     React.useEffect(() => {
         getInvoice(id)
-        .then(resp => {
-            console.log(resp.data.invoice);
-            setPayed(resp.data.invoice.payed)
-            setContract(resp.data.invoice);
+        .then(resp => {            
+            setPayed(resp.data.payed)
+            setContract(resp.data);
             setloading(false);
         } );
     }, [payed])
@@ -35,8 +34,9 @@ const Invoice = (props) => {
         createPayment(contract._id)
         .then(resp => {
             const data = resp.data;                        
-            setPayed(true);
-            setnotif({msg: data.msg, success: data.ok});
+            const success = (resp.status === 200) ? true: false;
+            setPayed(success);
+            setnotif({msg: data.msg, success});
             setTimeout(() => {
                 setnotif({ msg:'', success: ''});
                 setloading(false);

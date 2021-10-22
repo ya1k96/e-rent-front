@@ -1,21 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import neutralUser from '../../images/icons/neutral-user.png';
-import { getRenters } from '../services/connect';
+import { getRenters } from '../../services/connect';
 import { spinner } from '../utils/spinner';
 const Renters = () => {
     const [renters, setrenters] = React.useState([]);
     const [loading, setloading] = React.useState(true);
     
     React.useEffect(()=> {
-        getRenters().then(resp => {
-            const data = resp.data;
-            if(data.ok) {
-                setrenters(data.renters);
+        getRenters().then(resp => {            
+            if(resp.status === 200) {
+                setrenters(resp.data);
                 setloading(false);
             }
         });
-    }, [false]);
+    }, []);
 
     return(<>
     <div className="flex justify-center mt-5">
@@ -33,10 +32,15 @@ const Renters = () => {
         <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-4">
             {                 
                 (renters.length > 0 && !loading) ?
-                renters.map(renter => <Link to={'/renter/'+renter._id} key={renter._id}>
+                renters.map(renter => <Link to={'/dashboard/renter/'+renter._id} key={renter._id}>
                 <div className="bg-white shadow-lg rounded-xl w-40 h-40 hover:bg-blue-200  cursor-pointer animate__animated animate__fadeIn">                        
                 <img className="m-auto mt-3 w-28 h-28" src={neutralUser} alt="invoice-logo"></img>
                 <p className="text-center font-medium text-gray-600 ">{renter.name +' '+ renter.surname}</p>
+                {
+                    renter.aldia ? <div className="flex justify-center">
+                        <p className="bg-green-400 rounded-full text-white text-sm font-sans w-1/3 pl-2 pr-1">Al dia</p>
+                    </div> : ''
+                }
             </div></Link> ) : ''          
             }
         </div>

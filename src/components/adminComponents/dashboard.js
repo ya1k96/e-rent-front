@@ -3,7 +3,7 @@ import invoiceLogo from '../../images/icons/invoice.png';
 import {spinner} from "../utils/spinner";
 import { Link } from "react-router-dom";
 import React from 'react';
-import { getBoard } from '../services/connect';
+import { getBoard } from '../../services/connect';
 import { useQuery } from 'react-query'
 import ListInvoices from '../utils/listInvoices';
 
@@ -11,8 +11,8 @@ const Dashboard = () => {
     const { isLoading, error, data } = useQuery('dashboard', getBoard);
 
     const renderInvoices = () => {    
-        return data?.data.renters.length > 0
-        ? <ListInvoices renters={data.data.renters}></ListInvoices> 
+        return data?.data.length > 0
+        ? <ListInvoices renters={data.data}></ListInvoices> 
         : <p className="font-medium text-lg text-gray-500 text-center my-16 text-shadow">Nada por aqui</p>
     }
 

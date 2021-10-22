@@ -1,8 +1,9 @@
 import React from "react";
-import { getRenterById } from "../services/connect";
+import { getRenterById } from "../../services/connect";
 import { spinner } from "../utils/spinner";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import WordSpace from "../utils/WordSpace";
 
 export const RenterProfile = (props) => {
     const [loading, setloading] = React.useState(true);
@@ -13,10 +14,9 @@ export const RenterProfile = (props) => {
 
     React.useEffect(() => {
         getRenterById(id)
-        .then(resp => {
-            const data = resp.data;        
+        .then(resp => {                  
             setloading(false);        
-            setrenter(data.contract);
+            setrenter(resp.data);
         });
     }, []);
 
@@ -29,17 +29,18 @@ export const RenterProfile = (props) => {
             <div className="overflow-hidden sm:rounded-md bg-white shadow-lg mx-5   ">
             <div className="px-4 py-5 sm:p-6">
                 <p className="text-md text-gray-600">
-                    Contrato celebrado con <span className="text-md text-gray-700 font-medium">{renter?.surname + ' ' + renter?.name}</span>, por un monto total de <span className="text-md text-gray-700 font-medium">{renter?.price}ARS</span> y un plazo de <span className="text-md text-gray-700 font-medium">
-                        {moment(renter?.end).from(renter?.begin)}.
+                    Contrato celebrado con <span className="text-md text-gray-700 font-medium"><WordSpace>{renter?.surname + ' ' + renter?.name}</WordSpace></span>, por un monto total de <span className="text-md text-gray-700 font-medium">{renter?.price}ARS</span> y un plazo de <span className="text-md text-gray-700 font-medium">
+                        <WordSpace>{moment(renter?.end).from(renter?.begin)}.</WordSpace>
                     </span> 
                      Iniciando el dia 
                     <span className="text-md text-gray-700 font-medium">
-                    { moment(renter?.begin).format('YYYY-MM-DD')}
+                    <WordSpace>{ moment(renter?.begin).format('YYYY-MM-DD')}</WordSpace>
                     </span>, dando por finalizado a la fecha { moment(renter?.end).format('YYYY-MM-DD')}.
                     <br/>
                     Se fija un incremento de 
                     <span className="text-md text-gray-700 font-medium">
-                    {renter?.increment_porc}%
+                        <WordSpace>{renter?.increment_porc}%
+                        </WordSpace>
                     </span>
                      con respecto al precio del ultimo recibo, este se hara cada 
                      <span className="text-md text-gray-700 font-medium">

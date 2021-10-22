@@ -17,6 +17,10 @@ export const getInvoice = (id) => {
     return axios.get(`${url}invoices/detail/${id}`);        
 }
 
+export const getInvoices = (from = '', until = '', payed = false, renter = '') => {       
+    return axios.get(`${url}invoices?from=${from}&until=${until}&payed=${payed}&renter=${renter}`);
+}
+
 export const createRenter = (renter) => {
     return axios.post(`${url}renters/add`, renter);
 }

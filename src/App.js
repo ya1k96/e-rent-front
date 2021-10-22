@@ -14,13 +14,41 @@ import { Home } from './components/clientComponent/Home';
 import { NewRenter } from './components/adminComponents/newrenter';
 import { EditRenterProfile } from './components/adminComponents/editrenterprofile';
 import { RenterProfile } from './components/adminComponents/renterprofile';
-
-
+import { getUser } from './services/connect';
+import { Redirect } from 'react-router';
 
 const queryClient = new QueryClient();
 
 export const App = () => {      
-    const { user } = React.useContext(UserContext);
+    const { user, setUser } = React.useContext(UserContext);
+
+    const isUser = () => {
+        if(user.logged) {
+            if(user.publicUser.role === 'admin') { 
+                return (<Redirect to="/dashboard" />);
+                // return history.push('/home'); 
+            } 
+            
+        };
+        
+        if(localStorage.getItem('token')) {
+            let token = localStorage.getItem('token');
+            getUser(token)       
+            .then((resp) => {
+                if(resp.status === 200) {
+                    setUser({...user, logged: true, publicUser: resp.data});
+                    if(resp.data.role === 'admin') {
+                        return (<Redirect to="/dashboard" />);
+                    } 
+                }
+            })
+        }
+    }
+
+    React.useEffect(() => {
+        isUser();
+    }, [])
+
     return (<>    
         <QueryClientProvider client={queryClient}>
         <HashRouter basename='/'>

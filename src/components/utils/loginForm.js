@@ -2,50 +2,20 @@ import React from "react";
 import logo from '../../images/eRent144x144.png';
 import { useForm } from 'react-hook-form';
 import { UserContext } from "../context/userContext";
-import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
-import {loader} from '../utils/spinner';
-import { getUser, loginUser } from "../services/connect";
+import { loader } from '../utils/spinner';
+import { loginUser } from "../../services/connect";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Redirect } from 'react-router';
 
 export const LoginForm = () => {
     let className = `rounded-full relative shadow-sm h-10 
-    focus:rounded-full focus:ring
-    focus:outline-none block w-full pl-7 pr-12 md:text-sm sm:text-lg border-gray-300 rounded-full border-2`;
-    let history = useHistory();
+    focus:rounded-full focus:ring focus:ring-blue-200 focus:border-blue-300 
+     block w-full pl-7 pr-12 md:text-sm sm:text-lg border-gray-300 rounded-full border-2`;
     const {user, setUser} = React.useContext(UserContext);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [loading, setLoading] = React.useState(false);
-
-    const isUser = () => {
-        if(user.logged) {
-            if(user.publicUser.role === 'client') { 
-                return history.push('/home');
-            } else {
-                return history.push('/dashboard');
-            }
-        };
-        
-        if(localStorage.getItem('token')) {
-            let token = localStorage.getItem('token');
-            getUser(token)       
-            .then((resp) => {
-                if(resp.data.ok) {
-                    setUser({...user, logged: true, publicUser: resp.data.decoded});
-                    if(resp.data.decoded.role === 'admin') {
-                        history.push('/dashboard');
-                    } else {
-                        history.push('/home');                        
-                    }
-                }
-            })
-        }
-    }
-
-    React.useEffect(() => {
-        isUser();
-    }, [])
 
     const onSubmit = (data) => {
         setLoading(true);
@@ -55,12 +25,12 @@ export const LoginForm = () => {
         };
 
         loginUser(body)
-        .then(resp => {
+        .then(resp => {            
             const data = resp.data;
-            if(data.ok) {
+            if(resp.status === 200) {
                 localStorage.setItem('token', JSON.stringify(data.token));    
                 setUser({...user, logged: true, publicUser: data.publicUser});
-                history.push('/');                                
+                return (<Redirect to="/dashboard" />)                                
             } else {
                 toast(resp?.msg);   
             }            

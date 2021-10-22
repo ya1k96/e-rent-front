@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from 'react-hook-form';
-import { createRenter } from "../services/connect";
+import { createRenter } from "../../services/connect";
 import { spinner } from "../utils/spinner";
 export const NewRenter = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();

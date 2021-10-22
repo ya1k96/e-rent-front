@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from 'react-hook-form';
-import { getRenterById } from "../services/connect";
+import { getRenterById } from "../../services/connect";
 import { spinner } from "../utils/spinner";
 import moment from "moment";
 
@@ -11,13 +11,12 @@ export const EditRenterProfile = (props) => {
     const [renter, setrenter] = React.useState(null);
     
     const {id} = props.computedMatch.params;
-    moment.locale('es');
 
     React.useEffect(() => {
         getRenterById(id)
-        .then(resp => {
-            const data = resp;        
-            setrenter(data.contract);            
+        .then(resp => { 
+            console.log(resp)                
+            setrenter(resp.data);            
             setloading(false);        
         });
     }, []);

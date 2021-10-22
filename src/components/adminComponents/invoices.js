@@ -3,29 +3,30 @@ import { Link, withRouter } from "react-router-dom";
 import ItemInvoice from "../utils/itemInvoice";
 import { spinner } from "../utils/spinner";
 import { useForm } from 'react-hook-form';
+import { getInvoices } from "../../services/connect";
 
 const Invoices = (props) => {
     const [state, setState] = useState([]);    
     const [loading, setloading] = useState(true)   
     const { register, handleSubmit } = useForm();
 
-    const getInvoices = (from = '', until = '', payed = false, renter = '') => {
+    const fecthInvoices = (from = '', until = '', payed = false, renter = '') => {
         setloading(true);
+        getInvoices(from, until, payed, renter)
+        .then((resp) => {            
+            setState(resp.data);
+            setloading(false); 
+
+        });
         
-        fetch(`http://192.168.1.8:8080/api/invoices?from=${from}&until=${until}&payed=${payed}&renter=${renter}`)
-        .then(resp => resp.json())
-        .then(resp => {
-            setState(resp.invoices);
-            setloading(false);
-        })
     }
 
     React.useEffect(() => {
-        getInvoices();
+        fecthInvoices();
     }, [])
         
     const onSubmit = (data) => {        
-        getInvoices(data.from, data.until, data.payed, data.renter);
+        fecthInvoices(data.from, data.until, data.payed, data.renter);
     }
 
     const renderList = () => {
