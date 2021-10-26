@@ -34,11 +34,10 @@ const Invoice = (props) => {
         createPayment(contract._id)
         .then(resp => {
             const data = resp.data;                        
-            const success = (resp.status === 200) ? true: false;
-            setPayed(success);
-            setnotif({msg: data.msg, success});
+            if(resp.status === 200) setPayed(true);            
+            setnotif({msg: data.msg, payed});
             setTimeout(() => {
-                setnotif({ msg:'', success: ''});
+                setnotif({ msg:'', success: payed});
                 setloading(false);
             }, 3000);
         })        
