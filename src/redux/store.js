@@ -6,9 +6,9 @@ import invoicesReducer from './invoicesDuck';
 import contractReducer from './contractDuck';
 
 const rootReducer = combineReducers({
+    contracts: contractReducer,
     invoices: invoicesReducer,
     auth: authReducer,
-    contract: contractReducer
 });
 
 export default function generateStore() {

@@ -5,11 +5,10 @@ import Invoices from './components/adminComponents/invoices';
 import Renters from './components/adminComponents/renters';
 import Invoice from './components/adminComponents/invoice';
 import Navbar from './components/partials/navbar';
+import NewRenter  from './components/adminComponents/newrenter';
 import { LoginForm } from './components/utils/loginForm';
 import { HashRouter, Route, Switch } from "react-router-dom";
 import { RegisterForm } from './components/utils/registerForm';
-import { Home } from './components/clientComponent/Home';
-import { NewRenter } from './components/adminComponents/newrenter';
 import { EditRenterProfile } from './components/adminComponents/editrenterprofile';
 import { RenterProfile } from './components/adminComponents/renterprofile';
 import { useSelector } from 'react-redux';
@@ -41,18 +40,13 @@ export const App = () => {
     //         })
     //     }
     // }
-
-    React.useEffect(() => {
-        console.log(user);
-        
-    }, [user])
     return (<>   
             <HashRouter basename='/'>
                 {user ? <Navbar name={user.name}></Navbar>: null}
                 <Switch>
                     {user ? null: <Route exact path="/" component={LoginForm}/>}                    
                     {user ? null: <Route exact path="/register" component={RegisterForm}/>}                                   
-                    <HashRouter basename="/dashboard">
+                    <HashRouter basename="/">
                         <Switch>
                             <ProtectedRoute exact path="/" component={Dashboard} role="admin" user={user}></ProtectedRoute>  
                             <ProtectedRoute exact path="/invoices" component={Invoices} role="admin" user={user}></ProtectedRoute>  
@@ -62,8 +56,7 @@ export const App = () => {
                             <ProtectedRoute exact path="/renter/:id/edit" component={EditRenterProfile} role="admin" user={user}></ProtectedRoute>  
                             <ProtectedRoute exact path="/invoice/:id" component={Invoice} role="admin" user={user}></ProtectedRoute> 
                         </Switch>
-                    </HashRouter> 
-                    <ProtectedRoute exact path="/home" component={Home} role="client" user={user}></ProtectedRoute>                            
+                    </HashRouter>                                               
                 </Switch>
             </HashRouter>                    
     </>);

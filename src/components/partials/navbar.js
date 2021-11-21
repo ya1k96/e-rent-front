@@ -1,11 +1,9 @@
 import React, {useState} from "react";
 import logoERent from '../../images/eRent_brand.png';
-import { UserContext } from "../context/userContext";
 import { Redirect } from 'react-router';
 import Modal from "../utils/modal";
 
 const Navbar = (props) => {
-    const { setUser } = React.useContext(UserContext);
     const [active, setActive] = useState(false);
 
     const toggle = () => {
@@ -14,7 +12,6 @@ const Navbar = (props) => {
 
     const handle = () => {
         localStorage.removeItem('token');
-        setUser({publicUser:null, logged: false})
         return (<Redirect to="/" />);
     }
 
