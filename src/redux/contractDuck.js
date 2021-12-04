@@ -66,8 +66,8 @@ export const createContract = (contract) => (dispatch, getState) => {
 export const listarContratos = () => (dispatch, getState) => {
     dispatch({type: START_CONTRACT_LOADING});
     const token = localStorage.getItem('token');
-    
-    axios.post(`${config.URL_SERVER}${URL_REDUCER}`, contract,
+
+    axios.get(`${config.URL_SERVER}${URL_REDUCER}`,
     {
         headers: {
           'Authorization': `Bearer ${JSON.parse(token)}` 
