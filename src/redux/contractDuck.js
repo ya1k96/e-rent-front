@@ -21,8 +21,12 @@ export default function contractReducer(state = initialData, action) {
             return {...state, isLoading: false, one: action.payload.array, success: true, message: action.payload};
         case CONTRACT_CREATE_ERROR:
             return {...state, isLoading: false, success: true, message: action.payload};
+        case DEFAULT_ERROR:
+            return {...state, isLoading: false, success: false, message: action.payload};
         case START_CONTRACT_LOADING:
             return {...state, isLoading: true};        
+        case LISTAR_CONTRATOS:
+            return {...state, isLoading: false, success: true};        
         default: 
             return state;
     }
@@ -56,6 +60,36 @@ export const createContract = (contract) => (dispatch, getState) => {
             payload: 'Ocurrio un error al registrar el inquilino.'
         });        
 
-    });
+    });   
+}
+
+export const listarContratos = () => (dispatch, getState) => {
+    dispatch({type: START_CONTRACT_LOADING});
+    const token = localStorage.getItem('token');
     
+    axios.post(`${config.URL_SERVER}${URL_REDUCER}`, contract,
+    {
+        headers: {
+          'Authorization': `Bearer ${JSON.parse(token)}` 
+        }
+      })
+    .then(res => {
+        if(res.status > 199 && res.status < 300) {
+            dispatch({
+                type: LISTAR_CONTRATOS,
+                payload: {
+                    array: res.data.body,
+                    message: "OK"
+                },                
+            });
+        }
+
+    })
+    .catch(err => {
+        dispatch({
+            type: DEFAULT_ERROR,    
+            payload: 'Ocurrio un error.'
+        });        
+
+    });   
 }
