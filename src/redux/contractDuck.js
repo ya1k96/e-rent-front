@@ -18,9 +18,11 @@ const CONTRACT_CREATE_ERROR = 'CONTRACT_ERROR';
 export default function contractReducer(state = initialData, action) {
     switch(action.type) {        
         case CONTRACT_CREATE_SUCCESS:
-            return {...state, isLoading: false, array: action.payload.array, success: true, message: action.payload.message};
+            return {...state, isLoading: false, one: action.payload.array, success: true, message: action.payload};
+        case CONTRACT_CREATE_ERROR:
+            return {...state, isLoading: false, success: true, message: action.payload};
         case START_CONTRACT_LOADING:
-            return {...state, isLoading: true};
+            return {...state, isLoading: true};        
         default: 
             return state;
     }
