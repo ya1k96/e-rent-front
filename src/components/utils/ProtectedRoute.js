@@ -3,7 +3,7 @@ import { HashRouter as Route, Redirect} from "react-router-dom";
 
 function ProtectedRoute(props) {
     const {component: Component, match, user, role, ...rest} = props;
-    if(!user.logged || user.publicUser.role !== role){ 
+    if(!user || user.role !== role){ 
         return <Redirect to="/"></Redirect>;
     }
 

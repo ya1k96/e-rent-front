@@ -7,14 +7,14 @@ const Renters = () => {
     const [renters, setrenters] = React.useState([]);
     const [loading, setloading] = React.useState(true);
     
-    React.useEffect(()=> {
-        getRenters().then(resp => {            
-            if(resp.status === 200) {
-                setrenters(resp.data);
-                setloading(false);
-            }
-        });
-    }, []);
+    // React.useEffect(()=> {
+    //     getRenters().then(resp => {            
+    //         if(resp.status === 200) {
+    //             setrenters(resp.data);
+    //             setloading(false);
+    //         }
+    //     });
+    // }, []);
 
     return(<>
     <div className="flex justify-center mt-5">
