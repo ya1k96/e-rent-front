@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import ItemInvoice from "./itemInvoice";
 const ListInvoices = (props) => { 
-    console.log(props)   
     return props.renters.map(invoice => 
         <Link to={'/dashboard/invoice/'+invoice._id}
         key={invoice._id}>
