@@ -9,10 +9,12 @@ const initialData = {
     array: [],
     message: null
 }
-const URL_REDUCER = '/contracts';
+const URL_REDUCER = '/contracts/';
 const START_CONTRACT_LOADING = 'START_CONTRACT_LOADING';
 const CONTRACT_CREATE_SUCCESS = 'CONTRACT_SUCCESS';
 const CONTRACT_CREATE_ERROR = 'CONTRACT_ERROR';
+const LISTAR_CONTRATOS = 'LISTAR_CONTRATOS';
+const DEFAULT_ERROR = 'DEFAULT_ERROR';
 
 //REDUCERS
 export default function contractReducer(state = initialData, action) {
@@ -26,7 +28,7 @@ export default function contractReducer(state = initialData, action) {
         case START_CONTRACT_LOADING:
             return {...state, isLoading: true};        
         case LISTAR_CONTRATOS:
-            return {...state, isLoading: false, success: true};        
+            return {...state, isLoading: false, success: true, array: action.payload.array};        
         default: 
             return state;
     }
