@@ -47,3 +47,24 @@ export const dashboardInvoices = () => async (dispatch, getState) => {
         
     }
 }
+
+export const getInvoices = (opts) => async (dispatch, getState) => {
+    const token = localStorage.getItem('token');
+    dispatch({type: START_LOADING});
+    try {
+        const query = `?from=${opts.from}&payed=${opts.payed}&until=${opts.until}&renter=${opts.renter}`;
+        const res = await axios.get(`${config.URL_SERVER}/invoices${query}`,
+        {
+            headers: {
+              'Authorization': `Bearer ${JSON.parse(token)}` 
+            }
+          });
+        dispatch({
+            type: LIST_INVOICES,
+            payload: res.data
+        });
+    } catch (error) {
+        
+    }
+
+}
