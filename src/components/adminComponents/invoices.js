@@ -1,10 +1,10 @@
-import React, { StrictMode, useEffect, useState } from "react";
-import { Link, withRouter } from "react-router-dom";
-import ItemInvoice from "../utils/itemInvoice";
+import React, {useEffect} from "react";
+import { withRouter } from "react-router-dom";
 import { spinner } from "../utils/spinner";
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from "react-redux";
 import { getInvoices } from "../../redux/invoicesDuck";
+import ListInvoices from "../utils/listInvoices";
 
 const Invoices = (props) => {
     const dispatch = useDispatch();
@@ -34,15 +34,7 @@ const Invoices = (props) => {
 
     const renderList = () => {
         return array.length > 0 ? 
-        array.map(invoice => <Link to={'/dashboard/invoice/'+invoice._id}
-        key={invoice._id}>
-            <ItemInvoice name={invoice.contract_id.name + ' ' + invoice.contract_id.surname} 
-            total={invoice.total} 
-            month={invoice.month}
-            createdAt={invoice.createdAt}
-            >
-            </ItemInvoice>
-        </Link>)
+        <ListInvoices renters={array}></ListInvoices>
         :  
         <div className="flex place-content-center h-full">
             <p className="text-center font-medium text-md text-gray-400 my-auto">Nada por aqui</p>
