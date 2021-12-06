@@ -1,25 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Moment from 'react-moment';
 import logoUser from '../../images/icons/neutral-user.png';
 import { createPayment, getInvoice } from "../../services/connect";
 import { loader } from "../utils/spinner";
 import { withRouter } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { getOne } from "../../redux/invoicesDuck";
 
 const Invoice = (props) => {
-    const {id} = props.computedMatch.params;
-    const initialState = {
-        period: '',
-        expiration: '',
-        contract_id: {
-            name: '', surname: ''
-        }
-     }
-    const [contract, setContract] = React.useState(initialState);
+    const dispatch = useDispatch();
+    const { isLoading, array } = useSelector(store => store.invoices);
+
+    const {id} = props.computedMatch.params;    
     const [notif, setnotif] = React.useState({ msg: '' , success: ''});
     const [payed, setPayed] = React.useState(false);
-    const [loading, setloading] = React.useState(true);
     
-    React.useEffect(() => {
+    useEffect(() => {
         getInvoice(id)
         .then(resp => {            
             setPayed(resp.data.payed)
