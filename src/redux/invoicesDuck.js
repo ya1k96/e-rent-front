@@ -79,7 +79,7 @@ export const getOne = (id) => async (dispatch, getState) => {
     const token = localStorage.getItem('token');
     dispatch({type: START_LOADING});
     try {
-        const res = await axios.get(`${config.URL_SERVER}/invoices/${id}`,
+        const res = await axios.get(`${config.URL_SERVER}/invoices/getOne/${id}`,
         {
             headers: {
               'Authorization': `Bearer ${JSON.parse(token)}` 
