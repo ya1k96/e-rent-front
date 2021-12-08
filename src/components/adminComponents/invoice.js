@@ -1,26 +1,28 @@
 import React, { useEffect } from "react";
 import Moment from 'react-moment';
 import logoUser from '../../images/icons/neutral-user.png';
-import { createPayment, getInvoice } from "../../services/connect";
 import { loader } from "../utils/spinner";
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { getOne } from "../../redux/invoicesDuck";
+import { getOne } from "../../redux/paymen";
 
 const Invoice = (props) => {
     const dispatch = useDispatch();
     const { isLoading, one } = useSelector(store => store.invoices);
+    const payments = useSelector(store => store.payments);
 
     const {id} = props.computedMatch.params;    
-    const [notif, setnotif] = React.useState({ msg: '' , success: ''});
-    const [payed, setPayed] = React.useState(false);
+    // const [notif, setnotif] = React.useState({ msg: '' , success: ''});
+    // const [payed, setPayed] = React.useState(false);
     
     useEffect(() => {
         dispatch(getOne(id));
-    }, [payed])
+    }, [payments.one])
 
     
     const sendPayment = () => {
+        dispatch(createPayment());
     //     setloading(true);
     //     createPayment(contract._id)
     //     .then(resp => {
@@ -31,7 +33,7 @@ const Invoice = (props) => {
     //             setnotif({ msg:'', success: payed});
     //             setloading(false);
     //         }, 3000);
-    //     })        
+    //     })    
     }
 
     const CheckPayed = () => {
@@ -73,12 +75,12 @@ const Invoice = (props) => {
                 
             </div>
             <div className="flex self-center w-full items-center justify-center">
-            {
+            {/* {
             notif.msg.length > 0 ? <div className={ (notif.success ? ' bg-green-100' : 'bg-red-100') + " rounded-lg shadow-sm p-4 m-4 z-50 fixed animate__animated animate__fadeIn w-1/3 ml-10"}>
             <p className={ (notif.success ? ' text-green-700': 'text-red-400 ') + " font-medium text-sm"}>
                 {notif.msg}
             </p> </div>: ''
-            }
+            } */}
             <div className="bg-white shadow-lg rounded-lg md:w-2/4 sm:w-full h-2/4 p-8 pb-4 pr-3 md:pr-8 sm:mx-5">
                     <div className="flex justify-between">
                         <div className="grid grid-cols-1">
