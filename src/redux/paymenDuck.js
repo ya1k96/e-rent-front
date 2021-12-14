@@ -22,7 +22,7 @@ export default function paymentReducer(state = initialData, action) {
         case PAYMENT_CREATE_ERROR:
             return {...state, isLoading: false, success: false, message: action.payload};
         case START_PAYMENT_LOADING:
-            return {...state, isLoading: true};               
+            return {...state, isLoading: true};                            
         default: 
             return state;
     }
@@ -32,7 +32,7 @@ export const createPayment = (id) => (dispatch, getState) => {
     dispatch({type: START_PAYMENT_LOADING});
     const token = localStorage.getItem('token');
 
-    axios.post(`${config.URL_SERVER}${URL_REDUCER}create/${id}`,
+    axios.get(`${config.URL_SERVER}${URL_REDUCER}create/${id}`,
     {
         headers: {
           'Authorization': `Bearer ${JSON.parse(token)}` 
@@ -41,7 +41,7 @@ export const createPayment = (id) => (dispatch, getState) => {
     .then(res => {
         if(res.status > 199 && res.status < 300) {
             dispatch({
-                type: CONTRACT_CREATE_SUCCESS,
+                type: PAYMENT_CREATE_SUCCESS,
                 payload: {
                     array: res.data.body,
                     message: "Pago realizado con exito"

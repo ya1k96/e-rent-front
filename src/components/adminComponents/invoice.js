@@ -5,35 +5,21 @@ import { loader } from "../utils/spinner";
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { getOne } from "../../redux/invoicesDuck";
-import { getOne } from "../../redux/paymen";
+import { createPayment, getUrlPayment } from "../../redux/paymenDuck";
+
 
 const Invoice = (props) => {
     const dispatch = useDispatch();
     const { isLoading, one } = useSelector(store => store.invoices);
     const payments = useSelector(store => store.payments);
-
     const {id} = props.computedMatch.params;    
-    // const [notif, setnotif] = React.useState({ msg: '' , success: ''});
-    // const [payed, setPayed] = React.useState(false);
     
     useEffect(() => {
         dispatch(getOne(id));
-    }, [payments.one])
-
-    
+    }, [payments])
+       
     const sendPayment = () => {
-        dispatch(createPayment());
-    //     setloading(true);
-    //     createPayment(contract._id)
-    //     .then(resp => {
-    //         const data = resp.data;                        
-    //         if(resp.status === 200) setPayed(true);            
-    //         setnotif({msg: data.msg, payed});
-    //         setTimeout(() => {
-    //             setnotif({ msg:'', success: payed});
-    //             setloading(false);
-    //         }, 3000);
-    //     })    
+        dispatch(createPayment(id));      
     }
 
     const CheckPayed = () => {
@@ -44,17 +30,18 @@ const Invoice = (props) => {
     }
     
     const ReciboButton = () => {
-        return one.payed ? 
-        <a href={`http://192.168.1.8:8080/api/payments/detail/${one.payment._id}/${one._id}`}>
-            <button className="bg-blue-400 rounded-full p-1 px-2 mt-2 focus:outline-none" >                                
+        return one.payed ?  
+        <a href={one.payment?.doc_url} target="__blank">
+            <button className="bg-blue-400 rounded-full p-1 px-2 mt-2 focus:outline-none">                                
                 <p className="font-medium text-white text-md"><span className="fui-link"></span> Descargar recibo</p>
-            </button> 
+            </button>                 
+
         </a>
         : '';
     }
 
     const ButtonPay = () => {
-        return payed ? '' :
+        return one.payed ? '' :
         <div className="flex justify-center mt-4">        
                 <button className="bg-white focus:outline-none rounded-3xl p-3 px-6 text-blue-400 font-medium hover:text-blue-300 focus:ring"
                 onClick={sendPayment}>
@@ -108,7 +95,7 @@ const Invoice = (props) => {
                             </div>   
                             <br></br>                          
                             {
-                                !payed ? <p className="text-sm text-gray-500 mt-1">
+                                !one.payed ? <p className="text-sm text-gray-500 mt-1">
                                 <span>Vence </span> 
                                 <Moment fromNow>{one.expiration}</Moment>
                                 </p>: null
