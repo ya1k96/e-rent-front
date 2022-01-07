@@ -5,8 +5,15 @@ import { config } from "../config";
 const initialData = {
     array: [],
     offset: 0,
-    one: null,
-    isLoading: false
+    one: {
+        period: '',
+        expiration: '',
+        contract_id: {
+            name: '', surname: ''
+        }
+    },
+    isLoading: false,
+    isSuccess: null
 };
 
 const LIST_INVOICES = 'LIST_INVOICES';
@@ -17,12 +24,11 @@ const START_LOADING = 'START_LOADING';
 export default function invoiceReducer(state = initialData, action) {
     switch(action.type) {
         case LIST_INVOICES:
-            return {...state, array: action.payload.body, isLoading: false};
+            return {...state, array: action.payload, isLoading: false};
         case START_LOADING:
             return {...state, isLoading: true};
         case GET_ONE_INVOICE:
-            return state;
-            // return {...state, array: action.payload.array};
+            return {...state, one: action.payload, isLoading: false, isSuccess: true};
         default: 
             return state;
     }
@@ -61,7 +67,27 @@ export const getInvoices = (opts) => async (dispatch, getState) => {
           });
         dispatch({
             type: LIST_INVOICES,
-            payload: res.data
+            payload: res.data.body
+        });
+    } catch (error) {
+        
+    }
+
+}
+
+export const getOne = (id) => async (dispatch, getState) => {
+    const token = localStorage.getItem('token');
+    dispatch({type: START_LOADING});
+    try {
+        const res = await axios.get(`${config.URL_SERVER}/invoices/getOne/${id}`,
+        {
+            headers: {
+              'Authorization': `Bearer ${JSON.parse(token)}` 
+            }
+          });
+        dispatch({
+            type: GET_ONE_INVOICE,
+            payload: res.data.body
         });
     } catch (error) {
         

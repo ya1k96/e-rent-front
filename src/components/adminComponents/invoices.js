@@ -10,7 +10,7 @@ const Invoices = (props) => {
     const dispatch = useDispatch();
     const { isLoading, array } = useSelector(store => store.invoices);
     const { register, handleSubmit } = useForm();
-    let initialOpts = {
+    var initialOpts = {
         from: '', 
         until: '', 
         payed: '', 
