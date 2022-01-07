@@ -1,70 +1,45 @@
-import React from "react";
+import React, {useEffect} from "react";
 import logo from '../../images/eRent144x144.png';
 import { useForm } from 'react-hook-form';
-import { UserContext } from "../context/userContext";
 import { Link } from "react-router-dom";
 import { loader } from '../utils/spinner';
-import { loginUser } from "../../services/connect";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Redirect } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from "../../redux/authDuck";
 
 export const LoginForm = () => {
     let className = `rounded-full relative shadow-sm h-10 
     focus:rounded-full focus:ring focus:ring-blue-200 focus:border-blue-300 
-     block w-full pl-7 pr-12 md:text-sm sm:text-lg border-gray-300 rounded-full border-2`;
-    const {user, setUser} = React.useContext(UserContext);
+     block w-full pl-7 pr-12 md:text-sm sm:text-lg border-gray-300 rounded-full border-2 text-gray-500`;
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const [loading, setLoading] = React.useState(false);
+    const dispatch = useDispatch();
+    const {isLoading, error, success} = useSelector(store => store.auth);  
 
     const onSubmit = (data) => {
-        setLoading(true);
         const body = {
             email: data.email,
             password: data.password
         };
-
-        loginUser(body)
-        .then(resp => {            
-            const data = resp.data;
-            if(resp.status === 200) {
-                localStorage.setItem('token', JSON.stringify(data.token));    
-                setUser({...user, logged: true, publicUser: data.publicUser});
-                return (<Redirect to="/dashboard" />)                                
-            } else {
-                toast(resp?.msg);   
-            }            
-        })
-        .catch(error => {
-            toast(error.toString())
-        })
-        .finally(() => {
-            setLoading(false);
-        });
+        //Disparamos la accion de login
+        dispatch(login(body));        
     };
 
     return (<>
-        {loading ? loader() : ''}
-        <ToastContainer
-        position="bottom-center"
-        autoClose={5000}
-        toastClassName="bg-red-400 text-lg font-medium"
-        hideProgressBar={true}
-        bodyClassName="text-white"
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        />
+        {isLoading ? loader() : ''}        
         <div className="flex justify-center">
             <div className="md:w-2/5 md:h-2/5 p-10 grid grid-cols-1 gap-1">
                 <div className="flex justify-center">
                     <img src={logo} alt=""></img>          
                 </div>                
                 <p className="text-gray-500 text-center text-xl">e-rent</p>
-                <p className="text-gray-500 text-center mb-4 md:text-3xl sm:text-4xl">Ingresar</p>                               
+                <p className="text-gray-500 text-center mb-4 md:text-3xl sm:text-4xl">Ingresar</p>  
+                {/* ERROR SECTION  */}
+                {   
+                    (!success && error) ? 
+                    <div className="bg-red-200 rounded-xl p-2">
+                        <p className="font-medium text-sm text-red-500 text-center">{error}</p>
+                    </div>
+                    : ''
+                }                            
                 <form action="" onSubmit={handleSubmit(onSubmit)}>
                 <div className="mt-1 ">
                     <input type="text" id="email"

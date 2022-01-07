@@ -1,67 +1,47 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Moment from 'react-moment';
 import logoUser from '../../images/icons/neutral-user.png';
-import { createPayment, getInvoice } from "../../services/connect";
 import { loader } from "../utils/spinner";
 import { withRouter } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { getOne } from "../../redux/invoicesDuck";
+import { createPayment, getUrlPayment } from "../../redux/paymenDuck";
+
 
 const Invoice = (props) => {
-    const {id} = props.computedMatch.params;
-    const initialState = {
-        period: '',
-        expiration: '',
-        contract_id: {
-            name: '', surname: ''
-        }
-     }
-    const [contract, setContract] = React.useState(initialState);
-    const [notif, setnotif] = React.useState({ msg: '' , success: ''});
-    const [payed, setPayed] = React.useState(false);
-    const [loading, setloading] = React.useState(true);
+    const dispatch = useDispatch();
+    const { isLoading, one } = useSelector(store => store.invoices);
+    const payments = useSelector(store => store.payments);
+    const {id} = props.computedMatch.params;    
     
-    React.useEffect(() => {
-        getInvoice(id)
-        .then(resp => {            
-            setPayed(resp.data.payed)
-            setContract(resp.data);
-            setloading(false);
-        } );
-    }, [payed])
-
-    
+    useEffect(() => {
+        dispatch(getOne(id));
+    }, [payments])
+       
     const sendPayment = () => {
-        setloading(true);
-        createPayment(contract._id)
-        .then(resp => {
-            const data = resp.data;                        
-            if(resp.status === 200) setPayed(true);            
-            setnotif({msg: data.msg, payed});
-            setTimeout(() => {
-                setnotif({ msg:'', success: payed});
-                setloading(false);
-            }, 3000);
-        })        
+        dispatch(createPayment(id));      
     }
 
     const CheckPayed = () => {
-        return contract.payed ?
+        return one.payed ?
         <button className="bg-white rounded-full p-1 px-2 mt-2 focus:outline-none self-start">                                
             <p className="font-medium text-green-400"><span className="fui-check-circle text-green-400"></span> Pagado</p>
         </button>: '';        
     }
     
     const ReciboButton = () => {
-        return contract.payed ? 
-        <a href={`http://192.168.1.8:8080/api/payments/detail/${contract.payment._id}/${contract._id}`}>
-            <button className="bg-blue-400 rounded-full p-1 px-2 mt-2 focus:outline-none" >                                
+        return one.payed ?  
+        <a href={one.payment?.doc_url} target="__blank">
+            <button className="bg-blue-400 rounded-full p-1 px-2 mt-2 focus:outline-none">                                
                 <p className="font-medium text-white text-md"><span className="fui-link"></span> Descargar recibo</p>
-            </button> 
+            </button>                 
+
         </a>
         : '';
     }
 
     const ButtonPay = () => {
-        return payed ? '' :
+        return one.payed ? '' :
         <div className="flex justify-center mt-4">        
                 <button className="bg-white focus:outline-none rounded-3xl p-3 px-6 text-blue-400 font-medium hover:text-blue-300 focus:ring"
                 onClick={sendPayment}>
@@ -71,7 +51,7 @@ const Invoice = (props) => {
     }
 
     return (<>
-        {loading ? loader() : null }
+        {isLoading ? loader() : null }
         <div className="flex flex-col mt-4 ">
             <div className="self-center md:w-2/4 sm:w-full h-2/4 mb-2">
                 <button className="cursor-pointer" onClick={() => props.history.goBack()}>
@@ -82,29 +62,29 @@ const Invoice = (props) => {
                 
             </div>
             <div className="flex self-center w-full items-center justify-center">
-            {
+            {/* {
             notif.msg.length > 0 ? <div className={ (notif.success ? ' bg-green-100' : 'bg-red-100') + " rounded-lg shadow-sm p-4 m-4 z-50 fixed animate__animated animate__fadeIn w-1/3 ml-10"}>
             <p className={ (notif.success ? ' text-green-700': 'text-red-400 ') + " font-medium text-sm"}>
                 {notif.msg}
             </p> </div>: ''
-            }
+            } */}
             <div className="bg-white shadow-lg rounded-lg md:w-2/4 sm:w-full h-2/4 p-8 pb-4 pr-3 md:pr-8 sm:mx-5">
                     <div className="flex justify-between">
                         <div className="grid grid-cols-1">
                             <p className="text-gray-700 ">
                                 <span className="text-lg font-medium ">
                                     Mes de {' '}
-                                    <Moment format="MMMM">{contract.period}</Moment>                                 
+                                    <Moment format="MMMM">{one.period}</Moment>                                 
                                 </span>
                                 <br></br>                     
                                 Total a pagar 
                                 <span className="text-gray-500">
-                                {' ' + contract.total + ' ARS'}
+                                {' ' + one.total + ' ARS'}
                                 </span>  
                                 <br></br>                     
                                 Periodo {' '}
                                 <span className="text-gray-500">
-                                <Moment format="MMMM/Y">{contract.period}</Moment> 
+                                <Moment format="MMMM/Y">{one.period}</Moment> 
                                 </span>  
                             </p>  
                             <div className="mt-4">
@@ -115,9 +95,9 @@ const Invoice = (props) => {
                             </div>   
                             <br></br>                          
                             {
-                                !payed ? <p className="text-sm text-gray-500 mt-1">
+                                !one.payed ? <p className="text-sm text-gray-500 mt-1">
                                 <span>Vence </span> 
-                                <Moment fromNow>{contract.expiration}</Moment>
+                                <Moment fromNow>{one.expiration}</Moment>
                                 </p>: null
                             }
                         </div>
@@ -125,7 +105,7 @@ const Invoice = (props) => {
                             <img className="mb-2 w-24 h-24 self-center" src={logoUser} alt="invoice-logo"></img> 
                             <p className="text-gray-700 font-semibold text-center">
                                 <span className="text-gray-500 m-0">
-                                    {contract.contract_id.name + ' ' + contract.contract_id.surname}                        
+                                    {one.contract_id.name + ' ' + one.contract_id.surname}                        
                                 </span>
                             </p>
 

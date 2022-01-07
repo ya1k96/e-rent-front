@@ -1,5 +1,7 @@
 import axios from 'axios';
-export const url = `http://192.168.1.8:8080/api/`;
+import { config } from '../config';
+const URLSERVER = config.URL_SERVER;
+export const url = `${URLSERVER}/api/`;
 
 export const getUser = (token) => {
     return axios.get(`${url}verifyToken?token=${JSON.parse(token)}`);     

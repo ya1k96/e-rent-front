@@ -4,21 +4,24 @@ import { App } from './App';
 import './css/index.css';
 import './css/animate.min.css';
 import './css/flat-ui.css';
-import { UserProvider } from './components/context/userContext';
 import Moment from 'react-moment';
 import moment from 'moment/min/moment-with-locales';
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
+import { Provider } from 'react-redux';
+import generateStore from './redux/store';
 
 Moment.globalMoment = moment;
 Moment.globalLocale = 'es';
+const store = generateStore();
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserProvider>
+    <Provider store={store}>
       <App />
+      
+    </Provider> 
 
-    </UserProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

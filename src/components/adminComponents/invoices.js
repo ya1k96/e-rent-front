@@ -1,45 +1,40 @@
-import React, { useState } from "react";
-import { Link, withRouter } from "react-router-dom";
-import ItemInvoice from "../utils/itemInvoice";
+import React, {useEffect} from "react";
+import { withRouter } from "react-router-dom";
 import { spinner } from "../utils/spinner";
 import { useForm } from 'react-hook-form';
-import { getInvoices } from "../../services/connect";
+import { useDispatch, useSelector } from "react-redux";
+import { getInvoices } from "../../redux/invoicesDuck";
+import ListInvoices from "../utils/listInvoices";
 
 const Invoices = (props) => {
-    const [state, setState] = useState([]);    
-    const [loading, setloading] = useState(true)   
+    const dispatch = useDispatch();
+    const { isLoading, array } = useSelector(store => store.invoices);
     const { register, handleSubmit } = useForm();
-
-    const fecthInvoices = (from = '', until = '', payed = false, renter = '') => {
-        setloading(true);
-        getInvoices(from, until, payed, renter)
-        .then((resp) => {            
-            setState(resp.data);
-            setloading(false); 
-
-        });
-        
+    var initialOpts = {
+        from: '', 
+        until: '', 
+        payed: '', 
+        renter: ''
     }
 
-    React.useEffect(() => {
-        fecthInvoices();
+    useEffect(() => {
+        dispatch(getInvoices(initialOpts));
     }, [])
         
-    const onSubmit = (data) => {        
-        fecthInvoices(data.from, data.until, data.payed, data.renter);
+    const onSubmit = (data) => {    
+        initialOpts = {
+            from: data.from, 
+            until: data.until, 
+            payed: data.payed, 
+            renter: data.renter
+        }    
+
+        dispatch(getInvoices(initialOpts));
     }
 
     const renderList = () => {
-        return state.length > 0 ? 
-        state.map(invoice => <Link to={'/dashboard/invoice/'+invoice._id}
-        key={invoice._id}>
-            <ItemInvoice name={invoice.contract_id.name + ' ' + invoice.contract_id.surname} 
-            total={invoice.total} 
-            month={invoice.month}
-            createdAt={invoice.createdAt}
-            >
-            </ItemInvoice>
-        </Link>)
+        return array.length > 0 ? 
+        <ListInvoices renters={array}></ListInvoices>
         :  
         <div className="flex place-content-center h-full">
             <p className="text-center font-medium text-md text-gray-400 my-auto">Nada por aqui</p>
@@ -60,7 +55,7 @@ const Invoices = (props) => {
         <div className="grid md:grid-cols-3 divide-x sm:grid-cols-1 sm:divide-y divide-gray-300 bg-white rounded-lg shadow-xl md:w-3/5 sm:w-full sm:mx-4 ">
             <div className="col-span-2 my-auto h-80 overflow-y-auto p-5">
                 {
-                    loading ? <div className="flex items-center justify-center h-full">
+                    isLoading ? <div className="flex items-center justify-center h-full">
                     { spinner() }
                     </div> :
                     renderList()
