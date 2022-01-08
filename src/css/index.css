@@ -121,8 +121,29 @@ body {
   @apply grid md:grid-cols-3 sm:grid-cols-2 gap-4;
 }
 .renter-card {
-  @apply bg-white shadow-lg rounded-xl w-40 h-40 hover:bg-blue-200  cursor-pointer animate__animated animate__fadeIn;
+  @apply bg-white shadow-lg rounded-xl w-40 h-40 hover:bg-blue-200  cursor-pointer;
 }
 .text-card {
   @apply text-center font-medium text-gray-600;
+}
+.check-payed {
+  @apply bg-white rounded-full p-1 px-2 mt-2 focus:outline-none self-start;
+}
+.btn-outline-secondary {
+  @apply bg-white focus:outline-none rounded-3xl p-3 px-6 text-blue-400 font-medium hover:text-blue-300 focus:ring;
+}
+.buttons-list {
+  @apply flex flex-col md:flex-row gap-x-2 gap-y-0;
+}
+.card {
+  @apply bg-white shadow-lg rounded-lg;
+}
+.btn-text-white {
+  @apply font-medium text-white;
+}
+.header-back {
+  @apply self-center md:w-2/4 sm:w-full h-2/4;
+}
+.invoice-content {
+  @apply md:w-2/4 sm:w-full h-2/4 p-8 pb-4 pr-3 md:pr-8 sm:mx-5;
 }
