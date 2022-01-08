@@ -30,7 +30,7 @@ const Renters = () => {
         <div className="renters-grid">
             {                 
                 (array.length > 0 && !isLoading) ?
-                array.map(renter => <Link to={'/dashboard/renter/'+renter._id} key={renter._id}>
+                array.map(renter => <Link to={'/renter/'+renter._id} key={renter._id}>
                 <div className="renter-card animate__animated animate__fadeIn">                        
                 <img className="m-auto mt-3 w-28 h-28" src={neutralUser} alt="invoice-logo"></img>
                 <p className="text-card">{renter.name +' '+ renter.surname}</p>
