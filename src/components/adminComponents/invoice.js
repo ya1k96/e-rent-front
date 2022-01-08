@@ -24,7 +24,7 @@ const Invoice = (props) => {
 
     const CheckPayed = () => {
         return one.payed ?
-        <button className="bg-white rounded-full p-1 px-2 mt-2 focus:outline-none self-start">                                
+        <button className="check-payed">                                
             <p className="font-medium text-green-400"><span className="fui-check-circle text-green-400"></span> Pagado</p>
         </button>: '';        
     }
@@ -32,8 +32,8 @@ const Invoice = (props) => {
     const ReciboButton = () => {
         return one.payed ?  
         <a href={one.payment?.doc_url} target="__blank">
-            <button className="bg-blue-400 rounded-full p-1 px-2 mt-2 focus:outline-none">                                
-                <p className="font-medium text-white text-md"><span className="fui-link"></span> Descargar recibo</p>
+            <button className="btn-primary">                                
+                <p className="btn-text-white text-md"><span className="fui-link"></span> Descargar recibo</p>
             </button>                 
 
         </a>
@@ -42,18 +42,17 @@ const Invoice = (props) => {
 
     const ButtonPay = () => {
         return one.payed ? '' :
-        <div className="flex justify-center mt-4">        
-                <button className="bg-white focus:outline-none rounded-3xl p-3 px-6 text-blue-400 font-medium hover:text-blue-300 focus:ring"
-                onClick={sendPayment}>
-                Generar recibo
-                </button>            
+        <div className="content-center mt-4">        
+            <button className="btn-outline-secondary" onClick={sendPayment}>
+            Generar recibo
+            </button>            
         </div>;
     }
 
     return (<>
         {isLoading ? loader() : null }
-        <div className="flex flex-col mt-4 ">
-            <div className="self-center md:w-2/4 sm:w-full h-2/4 mb-2">
+        <div className="flex flex-col mt-4">
+            <div className="header-back mb-2">
                 <button className="cursor-pointer" onClick={() => props.history.goBack()}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
@@ -61,14 +60,14 @@ const Invoice = (props) => {
                 </button>
                 
             </div>
-            <div className="flex self-center w-full items-center justify-center">
+            <div className="content-center self-center w-full items-center">
             {/* {
             notif.msg.length > 0 ? <div className={ (notif.success ? ' bg-green-100' : 'bg-red-100') + " rounded-lg shadow-sm p-4 m-4 z-50 fixed animate__animated animate__fadeIn w-1/3 ml-10"}>
             <p className={ (notif.success ? ' text-green-700': 'text-red-400 ') + " font-medium text-sm"}>
                 {notif.msg}
             </p> </div>: ''
             } */}
-            <div className="bg-white shadow-lg rounded-lg md:w-2/4 sm:w-full h-2/4 p-8 pb-4 pr-3 md:pr-8 sm:mx-5">
+            <div className="card invoice-content">
                     <div className="flex justify-between">
                         <div className="grid grid-cols-1">
                             <p className="text-gray-700 ">
@@ -88,7 +87,7 @@ const Invoice = (props) => {
                                 </span>  
                             </p>  
                             <div className="mt-4">
-                                <div className="flex flex-col md:flex-row gap-x-2 gap-y-0">
+                                <div className="buttons-list">
                                     <CheckPayed></CheckPayed>
                                     <ReciboButton></ReciboButton>
                                 </div>                     
