@@ -17,7 +17,7 @@ const Renters = () => {
     return(<>
     <div className="flex justify-center mt-5">
         <Link to="/newrenter">
-            <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <button className="btn-primary">
                 <p className="text-white font-medium">Nuevo inquilino</p>
             </button>
         </Link>
