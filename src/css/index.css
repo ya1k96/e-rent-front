@@ -147,3 +147,9 @@ body {
 .invoice-content {
   @apply md:w-2/4 sm:w-full h-2/4 p-8 pb-4 pr-3 md:pr-8 sm:mx-5;
 }
+.head-text {
+  @apply font-medium text-2xl text-gray-500 text-center;
+}
+.profile-text {
+  @apply font-medium text-gray-700;
+}
