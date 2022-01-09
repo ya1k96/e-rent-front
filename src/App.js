@@ -17,29 +17,6 @@ import { useSelector } from 'react-redux';
 
 export const App = () => {      
     const {user} = useSelector(store => store.auth);
-
-    // const isUser = () => {
-    //     if(user.logged) {
-    //         if(user.publicUser.role === 'admin') { 
-    //             return (<Redirect to="/dashboard" />);
-    //             // return history.push('/home'); 
-    //         } 
-            
-    //     };
-        
-    //     if(localStorage.getItem('token')) {
-    //         let token = localStorage.getItem('token');
-    //         getUser(token)       
-    //         .then((resp) => {
-    //             if(resp.status === 200) {
-    //                 setUser({...user, logged: true, publicUser: resp.data});
-    //                 if(resp.data.role === 'admin') {
-    //                     return (<Redirect to="/dashboard" />);
-    //                 } 
-    //             }
-    //         })
-    //     }
-    // }
     return (<>   
             <HashRouter basename='/'>
                 {user ? <Navbar name={user.name}></Navbar>: null}
