@@ -71,7 +71,7 @@ const Invoices = (props) => {
                 <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
                     <label className="font-medium text-gray-600">Inquilino
                     </label>
-                    <input type="text" name="renter" key="0" className="h-12 border-gray-200 rounded-md focus:outline-none focus:ring text-gray-500 font-medium"
+                    <input type="text" name="renter" key="0" className="h-12 border-gray-200 rounded-md focus:outline-none focus:ring text-gray-500 font-medium" disabled
                     {
                         ...register('renter')
                     }></input>
